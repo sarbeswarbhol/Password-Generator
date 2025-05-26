@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Password Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background-color: #f0f4f8;
+    }
+    .container {
+      max-width: 400px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+    .slider-value {
+      text-align: center;
+      font-size: 18px;
+      margin: 10px 0;
+    }
+    input[type="range"] {
+      width: 100%;
+    }
+    .password-box {
+      font-family: monospace;
+      font-size: 18px;
+      text-align: center;
+      padding: 10px;
+      background: #eef;
+      border-radius: 5px;
+      margin: 15px 0;
+      word-break: break-word;
+    }
+    .copy-btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .copy-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Password Generator</h2>
+    <label for="length">Select password length:</label>
+    <input type="range" id="length" min="4" max="32" value="12" />
+    <div class="slider-value">Length: <span id="lengthValue">12</span></div>
+
+    <div class="password-box" id="password">Password will appear here</div>
+    <button class="copy-btn" onclick="copyPassword()">Copy</button>
+  </div>
+
+  <script>
+    const slider = document.getElementById('length');
+    const lengthDisplay = document.getElementById('lengthValue');
+    const passwordBox = document.getElementById('password');
+
+    function generatePassword() {
+      const length = parseInt(slider.value);
+      const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+";
+      let password = "";
+      for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * chars.length);
+        password += chars[randomIndex];
+      }
+      passwordBox.textContent = password;
+    }
+
+    function copyPassword() {
+      const password = passwordBox.textContent;
+      if (password && password !== "Password will appear here") {
+        navigator.clipboard.writeText(password)
+          .then(() => alert("Password copied to clipboard!"))
+          .catch(() => alert("Failed to copy password."));
+      }
+    }
+
+    slider.oninput = () => {
+      lengthDisplay.textContent = slider.value;
+      generatePassword();
+    };
+
+    generatePassword();
+  </script>
+</body>
+</html>
